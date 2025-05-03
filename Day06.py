@@ -1,8 +1,4 @@
-class Point:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
+from Point import Point
 
 class Day06:
     def __init__(self, data):
