@@ -29,28 +29,7 @@ class Day06:
             if self.input[guard_pos.y][guard_pos.x] != 'X':
                 part1 += 1
                 self.input[guard_pos.y][guard_pos.x] = 'X'
-            match guard_dir:
-                case '^':
-                    new_pos = Point(guard_pos.x, guard_pos.y - 1)
-                case '>':
-                    new_pos = Point(guard_pos.x + 1, guard_pos.y)
-                case '<':
-                    new_pos = Point(guard_pos.x - 1, guard_pos.y)
-                case 'v':
-                    new_pos = Point(guard_pos.x, guard_pos.y + 1)
-            if 0 <= new_pos.x < self.width and 0 <= new_pos.y < self.height and self.input[new_pos.y][new_pos.x] == '#':
-                match guard_dir:
-                    case '^':
-                        guard_dir = '>'
-                    case '>':
-                        guard_dir = 'v'
-                    case '<':
-                        guard_dir = '^'
-                    case 'v':
-                        guard_dir = '<'
-            else:
-                guard_pos = new_pos
-
+            guard_dir, guard_pos = self.move_guard(guard_dir, guard_pos)
 
         print("part1: ", str(part1))
 
@@ -73,29 +52,33 @@ class Day06:
             position = str(guard_pos.x) + guard_dir + str(guard_pos.y)
             if position in visited: return True
             visited.add(position)
-            match guard_dir:
-                case '^':
-                    new_pos = Point(guard_pos.x, guard_pos.y - 1)
-                case '>':
-                    new_pos = Point(guard_pos.x + 1, guard_pos.y)
-                case '<':
-                    new_pos = Point(guard_pos.x - 1, guard_pos.y)
-                case 'v':
-                    new_pos = Point(guard_pos.x, guard_pos.y + 1)
-            if 0 <= new_pos.x < self.width and 0 <= new_pos.y < self.height and self.input[new_pos.y][new_pos.x] == '#':
-                match guard_dir:
-                    case '^':
-                        guard_dir = '>'
-                    case '>':
-                        guard_dir = 'v'
-                    case '<':
-                        guard_dir = '^'
-                    case 'v':
-                        guard_dir = '<'
-            else:
-                guard_pos = new_pos
+            guard_dir, guard_pos = self.move_guard(guard_dir, guard_pos)
         return False
 
+    def move_guard(self, guard_dir, guard_pos):
+        new_pos = Point(0, 0)
+        match guard_dir:
+            case '^':
+                new_pos = Point(guard_pos.x, guard_pos.y - 1)
+            case '>':
+                new_pos = Point(guard_pos.x + 1, guard_pos.y)
+            case '<':
+                new_pos = Point(guard_pos.x - 1, guard_pos.y)
+            case 'v':
+                new_pos = Point(guard_pos.x, guard_pos.y + 1)
+        if 0 <= new_pos.x < self.width and 0 <= new_pos.y < self.height and self.input[new_pos.y][new_pos.x] == '#':
+            match guard_dir:
+                case '^':
+                    guard_dir = '>'
+                case '>':
+                    guard_dir = 'v'
+                case '<':
+                    guard_dir = '^'
+                case 'v':
+                    guard_dir = '<'
+        else:
+            guard_pos = new_pos
+        return guard_dir, guard_pos
 
 
 with open("Input06.txt") as file:
